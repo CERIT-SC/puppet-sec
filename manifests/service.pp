@@ -4,5 +4,6 @@ class sec::service {
 			ensure		=> running,
 			enable		=> true,
 			hasstatus	=> false,
+			pattern		=> '/usr/bin/sec',
 	}
 }
