@@ -42,7 +42,7 @@ class { 'sec':
 }
 ```
 
-Sec rule options:
+SEC rule options:
 
 ```puppet
 sec::rule { name
@@ -50,6 +50,7 @@ sec::rule { name
   rulename => $title,
   content  => '...',
 }
+```
 
 ***
 
