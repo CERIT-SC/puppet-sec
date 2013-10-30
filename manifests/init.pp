@@ -9,8 +9,8 @@ class sec (
   $daemon_args = $sec::params::daemon_args
 ) inherits sec::params {
 
-  validate_bool($enabled)
-  validate_array($packages)
+  validate_bool($enabled, $purge, $recurse)
+  validate_array($packages, $inputs)
 
   class { 'sec::install':
     enabled  => $enabled,
