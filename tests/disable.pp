@@ -1,0 +1,3 @@
+class { 'sec':
+  enabled => false,
+}

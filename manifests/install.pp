@@ -1,8 +1,13 @@
 class sec::install (
-	$packages
+  $enabled,
+  $packages
 ) {
-	package {
-		$packages:
-			ensure	=> present;
-	}
+  $_ensure = $enabled ? {
+    true  => present,
+    false => absent
+  }
+
+  package { $packages:
+    ensure => $_ensure,
+  }
 }

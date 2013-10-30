@@ -1,39 +1,56 @@
 class sec::config (
-  $conf_name,
+  $enabled,
+  $purge,
+  $recurse,
+  $include_dir,
   $daemon_args
 ) {
+  $_ensure = $enabled ? {
+    true  => directory,
+    false => absent,
+  }
+
+  # obsolete, cleanups
+  file { '/etc/sec.conf':
+    ensure => absent,
+  }
+
+  file { $include_dir:
+    ensure  => $_ensure,
+    purge   => $purge,
+    recurse => $recurse,
+    force   => true,
+  }
+
   case $::operatingsystem {
     debian,ubuntu: {
+      $_run = $enabled ? {
+        true    => 'yes',
+        default => 'no'
+      }
+
       augeas { 'sec':
         incl    => '/etc/default/sec',
         lens    => 'Shellvars.lns',
         context => '/files/etc/default/sec',
-        notify  => Class['sec::service'],
         changes => [
-          'set RUN_DAEMON yes',
+          "set RUN_DAEMON ${_run}",
           "set DAEMON_ARGS \"'${daemon_args}'\""
         ];
       }
     }
 
-    default: {
-      fail("Unsupported OS: ${::operatingsystem}")
+    redhat,eol,centos: {
+      augeas { 'sec':
+        incl    => '/etc/sysconfig/sec',
+        lens    => 'Sysconfig.lns',
+        context => '/files/etc/sysconfig/sec',
+        changes => "set SEC_ARGS \"${daemon_args}\"",
+      }
     }
-  }
 
-  # Concatenated SEC configuration
-  include concat::setup
-
-  concat { $conf_name:
-    owner  => 'root',
-    group  => 'root',
-    mode   => 0600,
-    notify => Class['sec::service'],
-  }
-
-  sec::rule { 'base':
-    order   => 0,
-    header  => '',
-    content => '# This is a Puppet generated file',
+    default: {
+      warning("Unsupported OS: ${::operatingsystem}")
+    }
   }
 }

@@ -1,24 +1,26 @@
 class sec::params {
-	case $::operatingsystem {
-		debian,ubuntu: {
-			$inputs		= ['/var/log/syslog']
-		}
+  $enabled = true
+  $purge = true
+  $recurse = true
+  $packages = ['sec']
+  $include_dir = '/etc/sec/'
+  $service = 'sec'
 
-		fedora,redhat,eol,centos: {
-			$inputs		= ['/var/log/messages']
-		}
+  $daemon_args = "-conf=<%= @include_dir %>/*.sec \
+<% @inputs.each do |i| %>-input=<%= i %> <% end %> \
+-intevents -syslog=daemon -detach -pid=/var/run/sec.pid"
 
-		default: {
-			fail("Unsupported OS (${::operatingsystem})")
-		}
-	}
+  case $::operatingsystem {
+    debian,ubuntu: {
+      $inputs = ['/var/log/syslog']
+    }
 
-	if $packages == ''		{ $packages 	= ['sec'] }
-	if $inputs == ''		{ $inputs 		= [] }
-	if $conf_name == ''		{ $conf_name	= '/etc/sec.conf' }
-	if $daemon_args  == '' 	{ $daemon_args	= '-conf=<%= conf_name %> <% @inputs.each do |i| %>--input=<%= i %> <% end %>-intevents -syslog=daemon -detach -pid=/var/run/sec.pid' }
+    redhat,eol,centos: {
+      $inputs = ['/var/log/messages']
+    }
 
-	if is_array($inputs) != true {
-		fail('$inputs must be array')
-	}
+    default: {
+      fail("Unsupported OS: ${::operatingsystem}")
+    }
+  }
 }
