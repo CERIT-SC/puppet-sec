@@ -1,0 +1,43 @@
+{
+  "name": "ceritsc-sec",
+  "version": "0.9.0",
+  "author": "ceritsc",
+  "summary": "Install and configure SEC (Simple Event Correlator)",
+  "license": "MIT",
+  "source": "https://github.com/CERIT-SC/puppet-sec.git",
+  "project_page": "https://github.com/CERIT-SC/puppet-sec",
+  "issues_url": "https://github.com/CERIT-SC/puppet-sec/issues",
+  "tags": [
+    "sec"
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.3"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.0.0"
+    }
+  ]
+}
