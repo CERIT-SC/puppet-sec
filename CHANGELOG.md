@@ -1,3 +1,11 @@
+## 2014-12-08 - Release 0.9.2
+
+Fix file/directory permissions.
+
+#### Bugfixes
+
+- Fix PF module archive file/directory permissions.
+
 ## 2014-09-02 - Release 0.9.1
 
 ### Summary
